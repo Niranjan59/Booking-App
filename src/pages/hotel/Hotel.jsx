@@ -5,40 +5,87 @@ import MailList from "../../component/mailList/MailList";
 import Footer from "../../component/footer/Footer";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleArrowLeft,
+  faCircleArrowRight,
+  faCircleXmark,
+  faLocationDot,
+} from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 const Hotel = () => {
+  const [slideNumber, setSlideNumber] = useState(0);
+  const [open, setOpen] = useState(false);
+
   const photos = [
     {
       src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/252631683.jpg?k=bf467a4724479e2d4b7f07a5d1e81f22232f17a45bb76f36bc5f67d6b31ac457&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/252631300.jpg?k=e8bc28226e64456e8daad7fda4573b4cb81f5abefa4f4db02444a7dc6a126976&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/376030448.jpg?k=1f347c24c7fb4a3ea15f409de7becb0c42217fc9e5de53e8f64cf834db7772c5&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/378056857.jpg?k=30ef3c38e2faf2227bc0da0115e7a14d75d2c4d8b96737dea013b30676de2e26&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/378056051.jpg?k=cd7480e391a662d12744ac8af1625b3ea4b435284aeaf6b4b1d58f90d0da5a94&o=&hp=1",
     },
     {
       src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/11132496.jpg?k=972307b5c8d7b32eefe673e22914977114f71758a9739bd2a2ae46120aed3147&o=&hp=1",
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/378056051.jpg?k=cd7480e391a662d12744ac8af1625b3ea4b435284aeaf6b4b1d58f90d0da5a94&o=&hp=1",
     },
   ];
+
+  const handleOpen = (i) => {
+    setSlideNumber(i);
+    setOpen(true);
+  };
+
+  const handleMove = (direction) => {
+    let newSlideNumber;
+
+    if (direction === "l") {
+      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+    } else {
+      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+    }
+    setSlideNumber(newSlideNumber);
+  };
   return (
     <div>
       <Navbar />
       <Header type="list" />
       <div className="hotelContainer">
+        {open && (
+          <div className="slider">
+            <FontAwesomeIcon
+              icon={faCircleXmark}
+              className="close"
+              onClick={() => setOpen(false)}
+            />
+            <FontAwesomeIcon
+              icon={faCircleArrowLeft}
+              className="arrow"
+              onClick={() => handleMove("l")}
+            />
+            <div className="sliderWrapper">
+              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+            </div>
+            <FontAwesomeIcon
+              icon={faCircleArrowRight}
+              className="arrow"
+              onClick={() => handleMove("r")}
+            />
+          </div>
+        )}
         <div className="hotelWrapper">
           <button className="bookNow">Reserve or Book Now!</button>
           <h1 className="hotelTitle">Grand Hotel</h1>
@@ -54,9 +101,14 @@ const Hotel = () => {
             taxi
           </span>
           <div className="hotelImages">
-            {photos.map((photo) => (
+            {photos.map((photo, i) => (
               <div className="hotelImgWrapper">
-                <img src={photo.src} alt="" className="hotelImg" />
+                <img
+                  onClick={() => handleOpen(i)}
+                  src={photo.src}
+                  alt=""
+                  className="hotelImg"
+                />
               </div>
             ))}
           </div>
